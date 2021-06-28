@@ -2,11 +2,13 @@ from models.product import Product
 from models.catalog import Catalog
 from models.user import User
 from repositories import product_repository
+from services import catalog_service, user_service
 from common.utils import check
+import json
 
 
 def get_all():
-    result, code = [product.get_dict() for product in product_repository.get_all()], 200
+    result, code = {'data': [product.get_dict() for product in product_repository.get_all()]}, 200
     return result, code
 
 
@@ -39,8 +41,8 @@ def update(data: dict, user: dict):
     if not product:
         return product, code
     
-    catalog = Catalog.query.get(product.catalog_id)
-    owner = User.query.get(catalog.user_id)
+    catalog = catalog_service.get(product['catalog_id'])
+    owner = user_service.get(catalog.user_id)
 
     if user['id'] != owner.id:
         return 'This product is not your.', 400
@@ -55,22 +57,14 @@ def update(data: dict, user: dict):
 def delete(product_id: int, user: dict):
     product, code = get(product_id)
     if not product:
-        return product, code
+        return f"Product with id {product_id} not found.", 404
     
-    catalog = Catalog.query.get(product.catalog_id)
-    owner = User.query.get(catalog.user_id)
+    catalog = catalog_service.get(product['catalog_id'])
+    owner = user_service.get(catalog.user_id)
 
     if user['id'] != owner.id:
         return 'This product is not your.', 400
 
     message, success = product_repository.delete(product_id)
-    result = success
-
-    if 'not found' in message:
-        code = 404
-    elif 'not possible' in message:
-        code = 400
-    else:
-        code = 200
-
-    return result, code
+    
+    return (message, 200) if success else (message, 400)

@@ -5,6 +5,10 @@ import jwt
 import time
 
 
+def get(user_id: int):
+    return user_repository.get(user_id)
+
+
 def get_by_username(username: str):
     if not username:
         return 'Username is None', 400

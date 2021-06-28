@@ -49,7 +49,7 @@ def delete(product_id: int) -> Tuple[str, bool]:
         db.session.delete(Product.query.get(product_id))
         db.session.commit()
     except UnmappedInstanceError:
-        return f"Product with id product_id not found.", False
+        return f"Product with id {product_id} not found.", False
     except IntegrityError:
         return "It's not possible to delete the product for which there is an order.", False
 

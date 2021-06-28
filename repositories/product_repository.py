@@ -21,7 +21,7 @@ def create(product: Product) -> Product:
 
 
 def update(product: dict) -> Product:
-    current_product = Product.query.get(product['id'])
+    current_product = get(product['id'])
 
     if 'name' in product.keys():
         current_product.name = product['name']

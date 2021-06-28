@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+    agent:
+        build: .
+        container_name: agent
+        ports:
+            - "8085:5000"
+        volumes:
+            - .:/usr/src/app
+        environment:
+            PYTHONUNBUFFERED: 1
+
+            FLASK_APP: app.py
+            FLASK_ENV: development
+            FLASK_RUN_HOST: 0.0.0.0
+
+            DB_TYPE: postgresql
+            DB_DRIVER: psycopg2
+            DB_USER: test
+            DB_PASSWORD: test
+            DB_HOST: db
+            DB_NAME: main
+
+            TEST_DATABASE_URI: sqlite:///database.db
+
+            KEY: ${KEY}
+            JWT_ALGORITHM: ${JWT_ALGORITHM}
+            JWT_SECRET: ${JWT_SECRET}
+        depends_on:
+            - db
+
+    db:
+        image: postgres
+        container_name: agent_db
+        ports: 
+            - "54324:5432"
+        volumes: 
+            - ./data/db:/var/lib/postgresql
+        environment:
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: test
+            POSTGRES_DB: main

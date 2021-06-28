@@ -26,7 +26,7 @@ def create(data: dict):
 
     products = [] # da se ne dobavljaju dva puta proizvodi
     for item in data['order_items']:
-        product = product_service.get(item['product_id'])['result']
+        product, code = product_service.get(item['product_id'])
         
         if product is None:
             return f'Product with id {item["product_id"]} not found.', 404

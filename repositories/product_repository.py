@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from models.product import Product
@@ -54,3 +55,17 @@ def delete(product_id: int) -> Tuple[str, bool]:
         return "It's not possible to delete the product for which there is an order.", False
 
     return "The product was successfully deleted.", True
+
+
+def get_highest_revenue_product() -> dict:
+    sql = text('SELECT product_id, sum(total) AS revenue FROM order_item GROUP BY product_id ORDER BY revenue DESC;')
+    result = db.engine.execute(sql).first()
+
+    return {'product': get(result[0]), 'revenue': result[1]}
+
+
+def get_best_selling_product() -> dict:
+    sql = text('SELECT id, quantity-available AS sold FROM product ORDER BY sold DESC;')
+    result = db.engine.execute(sql).first()
+
+    return {'product': get(result[0]), 'sold': result[1]}

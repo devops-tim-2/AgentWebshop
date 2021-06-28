@@ -1,6 +1,5 @@
+from models.report import Report
 from models.product import Product
-from models.catalog import Catalog
-from models.user import User
 from repositories import product_repository
 from services import catalog_service, user_service
 from common.utils import check
@@ -68,3 +67,17 @@ def delete(product_id: int, user: dict):
     message, success = product_repository.delete(product_id)
     
     return (message, 200) if success else (message, 400)
+
+
+def highest_revenue_product() -> dict:
+    product_info = product_repository.get_highest_revenue_product()
+    result, code = Report(product_info['product'], f'${product_info["revenue"]} was earned on the product.').get_dict(), 200
+
+    return result, code
+
+
+def best_selling_product() -> dict:
+    product_info = product_repository.get_best_selling_product()
+    result, code = Report(product_info['product'], f'{product_info["sold"]} units of the product have been sold.').get_dict(), 200
+
+    return result, code

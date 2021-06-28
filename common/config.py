@@ -3,6 +3,8 @@ from typing import Tuple
 from flask_cors import CORS
 from flask.app import Flask
 from flask_sqlalchemy import SQLAlchemy
+from routes.product_routes import product_api
+from routes.user_routes import user_api
 from common.database import db
 from models.product import Product
 from models.order import Order
@@ -38,6 +40,8 @@ config: dict = {
 def setup_config(cfg_name: str) -> Tuple[Flask, SQLAlchemy]:
     app = Flask(__name__)
     CORS(app)
+    app.register_blueprint(product_api, url_prefix='/api/product')
+    app.register_blueprint(user_api)
 
     cfg = config.get(cfg_name)
     for key in cfg.keys():

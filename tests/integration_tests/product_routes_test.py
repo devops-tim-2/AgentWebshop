@@ -54,9 +54,9 @@ class TestProduct:
 
     
     def test_get_sad(self):
-        response = self.client.get(f'/api/product/{1000}')
+        response = self.client.get(f'/api/product/{-1}')
         
-        assert response.status_code == 500
+        assert response.status_code == 404
 
 
     def test_create_happy(self):

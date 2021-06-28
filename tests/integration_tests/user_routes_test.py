@@ -25,13 +25,13 @@ class TestUser:
 
     def test_login_happy(self):
         data = dict(username=self.user.username, password='admin')
-        response = self.client.post('/auth', data=json.dumps(data), content_type='application/json').get_json()
+        response = self.client.post('/auth', data=json.dumps(data), content_type='application/json')
         
-        assert response['code'] == 200
+        assert response.status_code == 200
 
     
     def test_login_sad(self):
         data = dict(username='admin2', password='admin')
-        response = self.client.post('/auth', data=json.dumps(data), content_type='application/json').get_json()
+        response = self.client.post('/auth', data=json.dumps(data), content_type='application/json')
         
-        assert response['code'] == 404
+        assert response.status_code == 404

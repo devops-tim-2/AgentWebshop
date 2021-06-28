@@ -44,20 +44,19 @@ class TestProduct:
     def test_get_all(self):
         response = self.client.get('/api/product').get_json()
         
-        assert len(response['result']) == 2
+        assert len(response) == 2
 
     
     def test_get_happy(self):
         response = self.client.get('/api/product/{}'.format(self.product1.id)).get_json()
-        product_response = response['result']
 
-        assert product_response['id'] == self.product1.id
+        assert response['id'] == self.product1.id
 
     
     def test_get_sad(self):
-        response = self.client.get('/api/product/{}'.format(1000)).get_json()
+        response = self.client.get('/api/product/{}'.format(1000))
         
-        assert response['code'] == 404
+        assert response.status_code == 404
 
 
     def test_create_happy(self):
@@ -65,9 +64,8 @@ class TestProduct:
         login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_json()
         
         product_data = dict(name="vodka", price=20, quantity=20, image_url='http://slika.jpg')
-        create_response = self.client.post('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response['result']), 'Content-Type': 'application/json'}).get_json()
-        product_response = create_response['result']
-        product_db = Product.query.get(product_response['id'])
+        create_response = self.client.post('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response), 'Content-Type': 'application/json'}).get_json()
+        product_db = Product.query.get(create_response['id'])
 
         assert product_db.name == product_data['name']
         assert product_db.price == product_data['price']
@@ -81,7 +79,7 @@ class TestProduct:
 
         product_count_before = Product.query.count()
         product_data = dict(name="", price=20, quantity=20, image_url='http://slika.jpg')
-        create_response = self.client.post('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response['result']), 'Content-Type': 'application/json'}).get_json()
+        create_response = self.client.post('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response), 'Content-Type': 'application/json'})
         product_count_after = Product.query.count()
 
         assert product_count_before == product_count_after
@@ -92,7 +90,7 @@ class TestProduct:
         login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_json()
 
         product_data = dict(id=self.product1.id, name="vodka", price=20, quantity=20, image_url='http://slika.jpg')
-        update_response = self.client.put('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response['result']), 'Content-Type': 'application/json'}).get_json()
+        update_response = self.client.put('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response), 'Content-Type': 'application/json'}).get_json()
         product_db = Product.query.get(self.product1.id)
 
         assert product_db.name == product_data['name']
@@ -106,7 +104,7 @@ class TestProduct:
 
         product_before = Product.query.get(self.product1.id).get_dict()
         product_data = dict(id=self.product1.id, name="", price=20, quantity=20, available=20, image_url='http://slika.jpg', catalog_id=self.catalog.id)
-        update_response = self.client.put('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response['result']), 'Content-Type': 'application/json'}).get_json()
+        update_response = self.client.put('/api/product', data=json.dumps(product_data), headers={'Authorization': 'Bearer {}'.format(login_response), 'Content-Type': 'application/json'})
         product_after = Product.query.get(self.product1.id).get_dict()
 
         assert product_before == product_after
@@ -117,7 +115,7 @@ class TestProduct:
         login_data = dict(username=self.user.username, password='admin')
         login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_json()
 
-        delete_response = self.client.delete('/api/product/{}'.format(self.product1.id), headers={'Authorization': 'Bearer {}'.format(login_response['result'])})
+        delete_response = self.client.delete('/api/product/{}'.format(self.product1.id), headers={'Authorization': 'Bearer {}'.format(login_response)})
 
         assert Product.query.get(self.product1.id) == None
 
@@ -128,7 +126,7 @@ class TestProduct:
         login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_json()
 
         product_count_before = Product.query.count()
-        delete_response = self.client.delete('/api/product/{}'.format(self.product1.id), headers={'Authorization': 'Bearer {}'.format(login_response['result'])})
+        delete_response = self.client.delete('/api/product/{}'.format(self.product1.id), headers={'Authorization': 'Bearer {}'.format(login_response)})
         product_count_after = Product.query.count()
 
         assert product_count_before == product_count_after

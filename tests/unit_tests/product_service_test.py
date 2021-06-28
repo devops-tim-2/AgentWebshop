@@ -23,9 +23,9 @@ def test_create_ok(mocker):
 
     mocker.patch('services.product_service.product_repository.create', return_value=expected)
 
-    actual = product_service.create(data, user)
+    actual, code = product_service.create(data, user)
 
-    assert expected.get_dict()==actual['result']
+    assert expected.get_dict()==actual
 
 
 def test_create_empty_value():
@@ -42,11 +42,11 @@ def test_create_empty_value():
         'catalog_id': 1
     }
 
-    expected = Result('Some of the values are None, empty value or non-positive value', 400)
+    expected = 'Some of the values are None, empty value or non-positive value', 400
 
     actual = product_service.create(data, user)
 
-    assert expected.get_dict()==actual
+    assert expected==actual
 
 
 def test_update_ok(mocker):
@@ -61,9 +61,9 @@ def test_update_ok(mocker):
 
     mocker.patch('services.product_service.product_repository.update', return_value=expected)
 
-    actual = product_service.update(data)
+    actual, code = product_service.update(data)
 
-    assert expected.get_dict()==actual['result']
+    assert expected.get_dict()==actual
 
 
 def test_update_empty_value():
@@ -74,11 +74,11 @@ def test_update_empty_value():
         "image_url": "http://slika3.jpg"
     }
 
-    expected = expected = Result('Some of the values are None, empty value or non-positive value', 400)
+    expected = 'Some of the values are None, empty value or non-positive value', 400
 
     actual = product_service.update(data)
 
-    assert expected.get_dict()==actual
+    assert expected==actual
 
 
 def test_delete_ok(mocker):
@@ -90,7 +90,7 @@ def test_delete_ok(mocker):
 
     actual = product_service.delete(product_id)
     
-    assert success==actual['result']
+    assert success==actual
 
 
 def test_delete_not_found(mocker):
@@ -102,4 +102,4 @@ def test_delete_not_found(mocker):
 
     actual = product_service.delete(product_id)
     
-    assert success==actual['result']
+    assert (message, success)==actual

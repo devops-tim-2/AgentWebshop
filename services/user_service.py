@@ -16,7 +16,7 @@ def get_by_username(username: str):
 
 
 def login(data: dict):
-    user = get_by_username(data['username'])['result']
+    user, code = get_by_username(data['username'])
     if not user:
         return "User not found", 404
     

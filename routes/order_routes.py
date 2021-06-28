@@ -7,18 +7,18 @@ order_api = Blueprint('order_api', __name__)
 
 @order_api.route('', methods=["GET"])
 def get_all():
-    auth_result = auth(request.headers)
-    if auth_result['code'] != 200:
-        return auth_result
+    result, code = auth(request.headers)
+    if code != 200:
+        return result, code
 
     return order_service.get_all()
 
 
 @order_api.route('/<int:order_id>', methods=["GET"])
 def get(order_id: int):
-    auth_result = auth(request.headers)
-    if auth_result['code'] != 200:
-        return auth_result
+    result, code = auth(request.headers)
+    if code != 200:
+        return result, code
 
     return order_service.get(order_id)
 

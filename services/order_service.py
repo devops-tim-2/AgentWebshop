@@ -1,12 +1,12 @@
 from models.order_item import OrderItem
 from models.order import Order
-from repositories import order_repository
+from repositories import order_repository, product_repository
 from services import product_service
 from common.utils import check
 
 
 def get_all():
-    result, code = [order.get_dict() for order in order_repository.get_all()], 200
+    result, code = {'data': [order.get_dict() for order in order_repository.get_all()]}, 200
     return result, code
 
 
@@ -46,7 +46,7 @@ def create(data: dict):
     order = order_repository.create(order)
 
     for product in products:
-        product_service.update(product)
+        product_repository.update(product)
 
     result, code = order.get_dict(), 201
 

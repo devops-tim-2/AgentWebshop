@@ -1,6 +1,6 @@
-from flask import Flask
+from common.config import setup_config
 
-app = Flask(__name__)
+app, db = setup_config('dev')
 
 
 @app.route('/echo')

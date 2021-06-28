@@ -63,7 +63,7 @@ class TestReport:
         login_data = dict(username=self.user.username, password='admin')
         login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
-        response = self.client.get('/api/report/highest-revenue-product', headers={'Authorization': 'Bearer {}'.format(login_response)}).get_json()
+        response = self.client.get('/api/report/highest-revenue-product', headers={'Authorization': f'Bearer {login_response}'}).get_json()
         product = response['product']
 
         assert product['id'] == 2
@@ -73,7 +73,7 @@ class TestReport:
         login_data = dict(username=self.user.username, password='admin')
         login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
-        response = self.client.get('/api/report/best-selling-product', headers={'Authorization': 'Bearer {}'.format(login_response)}).get_json()
+        response = self.client.get('/api/report/best-selling-product', headers={'Authorization': f'Bearer {login_response}'}).get_json()
         product = response['product']
 
         assert product['id'] == 1

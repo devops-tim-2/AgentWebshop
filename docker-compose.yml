@@ -4,7 +4,7 @@ networks:
     apigateway_the_network:
       external: true
 services:
-    agent:
+    agent_backend:
         build:
           context: .
           dockerfile: Dockerfile

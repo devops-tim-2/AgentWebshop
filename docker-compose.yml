@@ -63,7 +63,7 @@ services:
             - apigateway_the_network
     db:
         image: postgres
-        container_name: agent_db
+        container_name: db
         ports: 
             - "54324:5432"
         volumes: 

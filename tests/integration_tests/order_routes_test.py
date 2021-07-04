@@ -46,7 +46,7 @@ class TestOrder:
 
     def test_get_all(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         response = self.client.get('/api/order', headers={'Authorization': f'Bearer {login_response}'}).get_json()
         
@@ -55,7 +55,7 @@ class TestOrder:
     
     def test_get_happy(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         response = self.client.get(f'/api/order/{self.order1.id}', headers={'Authorization': f'Bearer {login_response}'}).get_json()
 
@@ -64,7 +64,7 @@ class TestOrder:
     
     def test_get_sad(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         response = self.client.get(f'/api/order/{-1}', headers={'Authorization': f'Bearer {login_response}'})
         
@@ -73,7 +73,7 @@ class TestOrder:
 
     def test_create_happy(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
         
         order_data = dict(order_items=[dict(product_id=self.product.id, quantity=1)], address='some address', customer_name='some name')
         create_response = self.client.post('/api/order', data=json.dumps(order_data), headers={'Authorization': f'Bearer {login_response}', 'Content-Type': 'application/json'}).get_json()
@@ -86,7 +86,7 @@ class TestOrder:
     
     def test_create_sad(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         order_count_before = Product.query.count()
         order_data = dict(order_items=[json.dumps(dict(product_id=self.product.id, quantity=1001))], address='some address', customer_name='some name')

@@ -48,7 +48,7 @@ class TestReport:
 
     def test_highest_revenue_product(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         response = self.client.get('/api/report/highest-revenue-product', headers={'Authorization': f'Bearer {login_response}'}).get_json()
         product = response['product']
@@ -58,7 +58,7 @@ class TestReport:
 
     def test_best_selling_product(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         response = self.client.get('/api/report/best-selling-product', headers={'Authorization': f'Bearer {login_response}'}).get_json()
         product = response['product']

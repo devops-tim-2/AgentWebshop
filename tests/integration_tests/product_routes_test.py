@@ -55,7 +55,7 @@ class TestProduct:
 
     def test_create_happy(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
         
         product_data = dict(name="vodka", price=20, quantity=20, image_url='http://slika.jpg')
         create_response = self.client.post('/api/product', data=json.dumps(product_data), headers={'Authorization': f'Bearer {login_response}', 'Content-Type': 'application/json'}).get_json()
@@ -69,7 +69,7 @@ class TestProduct:
     
     def test_create_sad(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         product_count_before = Product.query.count()
         product_data = dict(name="", price=20, quantity=20, image_url='http://slika.jpg')
@@ -81,7 +81,7 @@ class TestProduct:
 
     def test_update_happy(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         product_data = dict(id=self.product1.id, name="vodka", price=20, quantity=20, image_url='http://slika.jpg')
         update_response = self.client.put('/api/product', data=json.dumps(product_data), headers={'Authorization': f'Bearer {login_response}', 'Content-Type': 'application/json'}).get_json()
@@ -94,7 +94,7 @@ class TestProduct:
     
     def test_update_sad(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         product_before = Product.query.get(self.product1.id).get_dict()
         product_data = dict(id=self.product1.id, name="", price=20, quantity=20, available=20, image_url='http://slika.jpg', catalog_id=self.catalog.id)
@@ -107,7 +107,7 @@ class TestProduct:
     @pytest.mark.run(order=-2)
     def test_delete_happy(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         delete_response = self.client.delete(f'/api/product/{self.product1.id}', headers={'Authorization': f'Bearer {login_response}'})
 
@@ -117,7 +117,7 @@ class TestProduct:
     @pytest.mark.run(order=-1)
     def test_delete_sad(self):
         login_data = dict(username=self.user.username, password='admin')
-        login_response = self.client.post('/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
+        login_response = self.client.post('/api/auth', data=json.dumps(login_data), content_type='application/json').get_data().decode('utf-8')
 
         product_count_before = Product.query.count()
         delete_response = self.client.delete(f'/api/product/{self.product1.id}', headers={'Authorization': f'Bearer {login_response}'})

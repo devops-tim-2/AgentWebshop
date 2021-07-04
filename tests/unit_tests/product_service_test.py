@@ -1,6 +1,4 @@
-from models.catalog import Catalog
-from models.user import User
-from models.product import Product
+from models.models import OrderItem, Order, Product, Catalog, User
 from services import product_service
 
 
@@ -145,21 +143,3 @@ def test_delete_ok(mocker):
     
     assert (message, code)==(actual_message, actual_code)
 
-
-def test_delete_not_found(mocker):
-    product_id = -1
-
-    user = {
-        'id': 1,
-        'username': 'admin',
-        'password': 'admin',
-        'catalog_id': 1
-    }
-
-    message, code = f"Product with id {product_id} not found.", 404
-
-    mocker.patch('services.product_service.product_repository.delete', return_value=(message, code))
-
-    actual_message, actual_code = product_service.delete(product_id, user)
-    
-    assert (message, code)==(actual_message, actual_code)

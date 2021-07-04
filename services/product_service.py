@@ -1,5 +1,4 @@
-from models.report import Report
-from models.product import Product
+from models.models import Product, Report
 from repositories import product_repository
 from services import catalog_service, user_service
 from common.utils import check

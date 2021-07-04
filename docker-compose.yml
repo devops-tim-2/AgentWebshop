@@ -1,17 +1,22 @@
-version: "3.7"
+version: "3"
 
+networks:
+    apigateway_the_network:
+      external: true
 services:
     agent:
-        build: .
+        build:
+          context: .
+          dockerfile: Dockerfile
+        command: sh -c "sleep 10 && python main.py"
         container_name: agent
         ports:
             - "8085:5000"
         volumes:
-            - .:/usr/src/app
+            - .:/app
+        depends_on:
+            - agent_queue
         environment:
-            PYTHONUNBUFFERED: 1
-
-            FLASK_APP: app.py
             FLASK_ENV: development
             FLASK_RUN_HOST: 0.0.0.0
 
@@ -23,21 +28,50 @@ services:
             DB_NAME: main
 
             TEST_DATABASE_URI: sqlite:///database.db
+            DEV_DATABASE_URI: postgresql+psycopg2://test:test@db/main
+            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://test:test@db/main
+            RABBITMQ_URI: amqps://qilglokd:nlmVctERVcA7th3VCE1-UL_uij-BCXyj@roedeer.rmq.cloudamqp.com/qilglokd
 
             KEY: ${KEY}
             JWT_ALGORITHM: ${JWT_ALGORITHM}
             JWT_SECRET: ${JWT_SECRET}
+        networks:
+            - apigateway_the_network
         depends_on:
             - db
 
+    agent_queue:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: sh -c "sleep 7 && python -u consume.py"
+        depends_on:
+            - db
+        environment:
+            TEST_DATABASE_URI: sqlite:///database.db
+            DEV_DATABASE_URI: postgresql+psycopg2://test:test@db/main
+            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://test:test@db/main
+            RABBITMQ_URI: amqps://qilglokd:nlmVctERVcA7th3VCE1-UL_uij-BCXyj@roedeer.rmq.cloudamqp.com/qilglokd
+    
+            DB_TYPE: postgresql
+            DB_DRIVER: psycopg2
+            DB_USER: test
+            DB_PASSWORD: test
+            DB_HOST: db
+            DB_NAME: main
+        networks:
+            - apigateway_the_network
     db:
         image: postgres
         container_name: agent_db
         ports: 
             - "54324:5432"
         volumes: 
-            - ./data/db:/var/lib/postgresql
+            - .dbdata:/var/lib/postgresql
         environment:
             POSTGRES_USER: test
             POSTGRES_PASSWORD: test
             POSTGRES_DB: main
+
+        networks:
+            - apigateway_the_network

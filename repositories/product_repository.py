@@ -1,9 +1,9 @@
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
-from models.product import Product
+from models.models import Product
 from typing import List, Tuple
-from common.database import db
+from common.database import db_session, engine
 
 
 def get_all() -> List[Product]:
@@ -15,8 +15,8 @@ def get(product_id: int) -> Product:
 
 
 def create(product: Product) -> Product:
-    db.session.add(product)
-    db.session.commit()
+    db_session.add(product)
+    db_session.commit()
 
     return product
 
@@ -36,19 +36,20 @@ def update(product: dict) -> Product:
         current_product.image_url = product['image_url']
 
     try:
-        db.session.commit()
+        db_session.commit()
 
         return current_product
     except Exception:
-        db.session.rollback()
+        db_session.rollback()
 
         return None    
 
 
 def delete(product_id: int) -> Tuple[str, bool]:
     try:
-        db.session.delete(Product.query.get(product_id))
-        db.session.commit()
+        product = Product.query.filter(Product.id == product_id).first()
+        db_session.delete(product)
+        db_session.commit()
     except UnmappedInstanceError:
         return f"Product with id {product_id} not found.", False
     except IntegrityError:
@@ -58,14 +59,14 @@ def delete(product_id: int) -> Tuple[str, bool]:
 
 
 def get_highest_revenue_product() -> dict:
-    sql = text('SELECT product_id, sum(total) AS revenue FROM order_item GROUP BY product_id ORDER BY revenue DESC;')
-    result = db.engine.execute(sql).first()
+    sql = text('SELECT product_id, sum(total) AS revenue FROM orderitem GROUP BY product_id ORDER BY revenue DESC;')
+    result = engine.execute(sql).first()
 
     return {'product': get(result[0]), 'revenue': result[1]}
 
 
 def get_best_selling_product() -> dict:
     sql = text('SELECT id, quantity-available AS sold FROM product ORDER BY sold DESC;')
-    result = db.engine.execute(sql).first()
+    result = engine.execute(sql).first()
 
     return {'product': get(result[0]), 'sold': result[1]}

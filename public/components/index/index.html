@@ -10,11 +10,11 @@
    
         <video class="bg-video" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop"><source src="/static/assets/bg.mp4" type="video/mp4" /></video>
 
-        <script src="/static/lib/axios.js"></script>
-        <script src="/static/lib/jquery.js"></script>
-        <script src="/static/lib/bootstrap.js"></script>
+        <script src="/static/libre/axios.js"></script>
+        <script src="/static/libre/jquery.js"></script>
+        <script src="/static/libre/bootstrap.js"></script>
         <script src="/static/dat/data.js"></script>
-        <script src="/static/lib/util.js"></script>
+        <script src="/static/libre/util.js"></script>
     </head>
     <body>
          <div class="masthead">
@@ -39,5 +39,10 @@
         </div>
         <script src="/static/components/index/index.js"></script>
     </body>
+    <script>
+        if (localStorage.getItem('identity')) {
+            window.location.href = 'www.google.com'
+        }
+    </script>
 </html>
 

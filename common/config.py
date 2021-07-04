@@ -33,7 +33,7 @@ def setup_config(cfg_name: str):
     app.register_blueprint(product_api, url_prefix='/api/product')
     app.register_blueprint(order_api, url_prefix='/api/order')
     app.register_blueprint(report_api, url_prefix='/api/report')
-    app.register_blueprint(user_api)
+    app.register_blueprint(user_api, url_prefix="/api")
 
 
     from models.models import Product, Order, OrderItem, User, Catalog

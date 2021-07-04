@@ -8,3 +8,4 @@ user_api = Blueprint('user_api', __name__)
 def login():
     data = request.get_json()
     return user_service.login(data)
+    

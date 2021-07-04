@@ -9,7 +9,7 @@ services:
           context: .
           dockerfile: Dockerfile
         command: sh -c "sleep 10 && python main.py"
-        container_name: agent
+        container_name: agent_backend
         ports:
             - "8085:5000"
         volumes:

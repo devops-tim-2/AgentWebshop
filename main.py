@@ -8,6 +8,10 @@ app = setup_config('dev')
 def send_index():
     return send_from_directory('../public/components/index/', 'index.html')
 
+@app.route('/login')
+def send_login():
+    return send_from_directory('../public/components/login/', 'login.html')
+
 @app.route('/static/<path:path>')
 def send(path):
     return send_from_directory('../public', path)

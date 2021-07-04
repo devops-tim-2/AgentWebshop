@@ -24,9 +24,7 @@ def login(data: dict):
     if not user:
         return "User not found", 404
     
-    encoded_password = user['password']
-
-    if bcrypt.checkpw(data['password'].encode('utf-8'), encoded_password.encode('utf-8')):
+    if bcrypt.checkpw(data['password'].encode('utf-8'), user['password'].encode('utf-8')):
         del user['password']
         
         # user['kid'] = environ.get('KEY')
@@ -35,3 +33,5 @@ def login(data: dict):
         encoded_jwt = jwt.encode(payload=user, key=environ.get('JWT_SECRET'), algorithm=environ.get('JWT_ALGORITHM'))
         
         return encoded_jwt, 200
+    else:
+        return "Password not good", 403

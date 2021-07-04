@@ -1,5 +1,4 @@
-from models.order_item import OrderItem
-from models.order import Order
+from models.models import Order, OrderItem
 from repositories import order_repository, product_repository
 from services import product_service
 from common.utils import check
@@ -26,7 +25,10 @@ def create(data: dict):
 
     products = [] # da se ne dobavljaju dva puta proizvodi
     for item in data['order_items']:
-        product, code = product_service.get(item['product_id'])
+        try:
+            product, code = product_service.get(item['product_id'])
+        except Exception:
+            return f'Product not found.', 404
         
         if product is None:
             return f'Product with id {item["product_id"]} not found.', 404

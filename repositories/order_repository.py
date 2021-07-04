@@ -1,6 +1,6 @@
-from models.order import Order
+from models.models import Order
 from typing import List
-from common.database import db
+from common.database import db_session
 
 
 def get_all() -> List[Order]:
@@ -12,7 +12,7 @@ def get(order_id: int) -> Order:
 
 
 def create(order: Order) -> Order:
-    db.session.add(order)
+    db_session.add(order)
     # db.session.commit()
 
     return order

@@ -1,0 +1,45 @@
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.cart-icon {
+    z-index: 9998;
+    position: fixed;
+    top: 30;
+    right: 30;
+    border-radius: 50%;
+    width:70px;
+    height:70px;
+}
+
+.cart-icon:hover {
+    outline: none;
+    box-shadow: 0 0 10px #9ecaed;
+}
+
+.fas {
+    line-height: 70px !important;
+}
+
+.cart-content {
+    z-index: 9999;
+    position: fixed;
+    top: 110;
+    right: 30;
+    min-width: 20vw;
+    max-width: 60vw;
+}
+
+.scroller {
+    max-height: 500px;   
+    padding: 1.5rem !important;
+    overflow-y: scroll;
+}
+
+.small-img {
+    height: 50px;
+}
+
+.ml-5 {
+    margin-left: 3rem !important;
+}

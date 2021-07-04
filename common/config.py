@@ -14,7 +14,7 @@ config = {
 def setup_config(cfg_name: str):
     environ['SQLALCHEMY_DATABASE_URI'] = environ.get(config[cfg_name])
     
-    app = Flask(__name__)
+    app = Flask(__name__, static_url_path='')
     if environ.get('ENABLE_CSRF') == 1:
         app.config['SECRET_KEY'] = environ.get('SECRET_KEY')
         app.config['WTF_CSRF_SECRET_KEY'] = environ.get('WTF_CSRF_SECRET_KEY')

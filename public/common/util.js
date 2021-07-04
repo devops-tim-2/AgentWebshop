@@ -1,4 +1,11 @@
-
+var api = 'http://localhost:8000/';
+var bearer = () => { 
+    if(localStorage.getItem('user-token')){
+        return {headers: { Authorization: `Bearer ${localStorage.getItem('user-token')}`} }
+    } else {
+        return {}
+    }
+}
 
 function fill_cart_content() {
     let inner = ''
@@ -33,7 +40,7 @@ function fill_cart_content() {
 
     
 
-    document.getElementById('cart-content').innerHTML = `<div class="scroller">${inner}</div><div class="btn btn-success col-6 offset-3 my-4">Checkout</div>`;
+    document.getElementById('cart-content').innerHTML = `<div class="scroller">${inner}</div><a href="/order" class="btn btn-success col-6 offset-3 my-4">Checkout</a>`;
 }
 
 

@@ -1,5 +1,8 @@
+from os import environ
+environ['SQLALCHEMY_DATABASE_URI'] = environ.get("TEST_DATABASE_URI")
+
 from flask import Flask
-from models.user import User
+from models.models import OrderItem, Order, Product, Catalog, User
 from common.config import setup_config
 import json
 
@@ -7,20 +10,14 @@ import json
 class TestUser:
     @classmethod
     def setup_class(self):
-        self.app, self.db = setup_config('test')
+        self.app = setup_config('test')
+        from common.database import db_session
 
         self.user = User(username='trlababalan', password='$2b$12$q8ure0Zm6SZnD0I1uZGGiuaIEnDoDK85GUpIpdI5jHlJeyrEuNPy2')
-        self.db.session.add(self.user)
-        self.db.session.commit()
+        db_session.add(self.user)
+        db_session.commit()
 
         self.client = self.app.test_client()
-
-
-    @classmethod
-    def teardown_class(self):
-        User.query.filter_by(id=self.user.id).delete()
-        
-        self.db.session.commit()
 
 
     def test_login_happy(self):

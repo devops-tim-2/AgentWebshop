@@ -1,62 +1,42 @@
 from os import environ
-from typing import Tuple
 from flask_cors import CORS
 from flask.app import Flask
-from flask_sqlalchemy import SQLAlchemy
-from routes.product_routes import product_api
-from routes.order_routes import order_api
-from routes.report_routes import report_api
-from routes.user_routes import user_api
-from common.database import db
-from models.product import Product
-from models.order import Order
-from models.order_item import OrderItem
-from models.user import User
-from models.catalog import Catalog
+from flask_wtf import CSRFProtect
 
 
-DevConfig = {
-    'DEBUG': True,
-    'DEVELOPMENT': True,
-    'SQLALCHEMY_DATABASE_URI': f'{environ.get("DB_TYPE")}+{environ.get("DB_DRIVER")}://{environ.get("DB_USER")}:{environ.get("DB_PASSWORD")}@{environ.get("DB_HOST")}/{environ.get("DB_NAME")}',
-    'SQLALCHEMY_ECHO': True,
-    'SQLALCHEMY_TRACK_MODIFICATIONS': False
+config = {
+    'test': 'TEST_DATABASE_URI',
+    'dev': 'DEV_DATABASE_URI'
 }
 
 
-TestConfig = {
-    'DEBUG': False,
-    'DEVELOPMENT': True,
-    'SQLALCHEMY_DATABASE_URI': f'{environ.get("TEST_DATABASE_URI")}',
-    'SQLALCHEMY_ECHO': True,
-    'SQLALCHEMY_TRACK_MODIFICATIONS': False
-}
 
-
-config: dict = {
-    'dev': DevConfig,
-    'test': TestConfig
-}
-
-
-def setup_config(cfg_name: str) -> Tuple[Flask, SQLAlchemy]:
+def setup_config(cfg_name: str):
+    environ['SQLALCHEMY_DATABASE_URI'] = environ.get(config[cfg_name])
+    
     app = Flask(__name__)
-    CORS(app)
+    if environ.get('ENABLE_CSRF') == 1:
+        app.config['SECRET_KEY'] = environ.get('SECRET_KEY')
+        app.config['WTF_CSRF_SECRET_KEY'] = environ.get('WTF_CSRF_SECRET_KEY')
+        csrf = CSRFProtect()
+        csrf.init_app(app)
+        
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "send_wildcard": "False"}})
+
+    from common.database import init_db
+    init_db()
+
+    from routes.product_routes import product_api
+    from routes.order_routes import order_api
+    from routes.report_routes import report_api
+    from routes.user_routes import user_api
     app.register_blueprint(product_api, url_prefix='/api/product')
     app.register_blueprint(order_api, url_prefix='/api/order')
     app.register_blueprint(report_api, url_prefix='/api/report')
     app.register_blueprint(user_api)
 
-    cfg = config.get(cfg_name)
-    for key in cfg.keys():
-        app.config[key] = cfg[key]
 
-    app.app_context().push()
-    db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
-
+    from models.models import Product, Order, OrderItem, User, Catalog
     if cfg_name == 'test':
         OrderItem.query.delete()
         Order.query.delete()
@@ -64,4 +44,4 @@ def setup_config(cfg_name: str) -> Tuple[Flask, SQLAlchemy]:
         Catalog.query.delete()
         User.query.delete()
 
-    return app, db
+    return app

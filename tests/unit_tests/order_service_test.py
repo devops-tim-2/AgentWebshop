@@ -1,6 +1,4 @@
-from models.order_item import OrderItem
-from models.order import Order
-from models.product import Product
+from models.models import OrderItem, Order, Product, Catalog, User
 from services import order_service
 
 

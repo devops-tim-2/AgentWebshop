@@ -24,12 +24,12 @@ services:
             DB_DRIVER: psycopg2
             DB_USER: test
             DB_PASSWORD: test
-            DB_HOST: db
+            DB_HOST: agent_db
             DB_NAME: main
 
             TEST_DATABASE_URI: sqlite:///database.db
-            DEV_DATABASE_URI: postgresql+psycopg2://test:test@db/main
-            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://test:test@db/main
+            DEV_DATABASE_URI: postgresql+psycopg2://test:test@agent_db/main
+            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://test:test@agent_db/main
             RABBITMQ_URI: amqps://qilglokd:nlmVctERVcA7th3VCE1-UL_uij-BCXyj@roedeer.rmq.cloudamqp.com/qilglokd
 
             KEY: ${KEY}
@@ -38,7 +38,7 @@ services:
         networks:
             - apigateway_the_network
         depends_on:
-            - db
+            - agent_db
 
     agent_queue:
         build:
@@ -46,32 +46,33 @@ services:
             dockerfile: Dockerfile
         command: sh -c "sleep 7 && python -u consume.py"
         depends_on:
-            - db
+            - agent_db
         environment:
             TEST_DATABASE_URI: sqlite:///database.db
-            DEV_DATABASE_URI: postgresql+psycopg2://test:test@db/main
-            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://test:test@db/main
+            DEV_DATABASE_URI: postgresql+psycopg2://test:test@agent_db/main
+            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://test:test@agent_db/main
             RABBITMQ_URI: amqps://qilglokd:nlmVctERVcA7th3VCE1-UL_uij-BCXyj@roedeer.rmq.cloudamqp.com/qilglokd
     
             DB_TYPE: postgresql
             DB_DRIVER: psycopg2
             DB_USER: test
             DB_PASSWORD: test
-            DB_HOST: db
+            DB_HOST: agent_db
             DB_NAME: main
         networks:
             - apigateway_the_network
-    db:
-        image: postgres
-        container_name: db
-        ports: 
-            - "54324:5432"
-        volumes: 
-            - .dbdata:/var/lib/postgresql
+    
+    agent_db:
+        image: postgres:latest
         environment:
             POSTGRES_USER: test
             POSTGRES_PASSWORD: test
+            POSTGRES_HOST: localhost
+            POSTGRES_PORT: 5432
             POSTGRES_DB: main
-
+        volumes:
+            - .dbdata:/var/lib/postgresql
+        ports:
+            - 54324:5432
         networks:
-            - apigateway_the_network
+            - apigateway_the_network  

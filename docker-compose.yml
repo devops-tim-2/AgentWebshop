@@ -39,6 +39,7 @@ services:
             - apigateway_the_network
         depends_on:
             - agent_db
+        hostname: agentservice
 
     agent_queue:
         build:

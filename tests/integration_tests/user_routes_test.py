@@ -1,3 +1,6 @@
+from os import environ
+environ['SQLALCHEMY_DATABASE_URI'] = environ.get("TEST_DATABASE_URI")
+
 from flask import Flask
 from models.models import OrderItem, Order, Product, Catalog, User
 from common.config import setup_config

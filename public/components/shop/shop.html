@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/libre/bootstrap.css">
+        <link rel="stylesheet" href="/static/libre/fa.css">
+        <link rel="stylesheet" href="/static/components/shop/shop.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+        <link rel="stylesheet" href="/static/common/style.css">
+        <script src="/static/common/util.js"></script>
+        
+        <script src="/static/libre/axios.js"></script>
+        <script src="/static/libre/jquery.js"></script>
+        <script src="/static/libre/bootstrap.js"></script>
+    </head>
+    <body>
+        <div class="cart-icon text-center border border-dark bg-light" onclick="flip_cart_content()">
+            <i class="text-dark fas fa-shopping-cart fa-2x cursor-pointer"></i>
+        </div>
+        <div class="cart-content border bg-light" id="cart-content" style="display: none;">
+            
+        </div>
+        <div class="col-lg-10 offset-lg-1 col-12 my-5 container-fluid">
+            <h1 class="mb-5 mt-2"><span id="username"></span>'s webshop</h1>
+            <div class="row" id="row">
+            </div>
+        </div>
+    </body>
+    <script src="/static/components/shop/shop.js"></script>
+</html>

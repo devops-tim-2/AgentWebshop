@@ -30,9 +30,11 @@ def setup_config(cfg_name: str):
     from routes.order_routes import order_api
     from routes.report_routes import report_api
     from routes.user_routes import user_api
+    from routes.catalog_routes import catalog_api
     app.register_blueprint(product_api, url_prefix='/api/product')
     app.register_blueprint(order_api, url_prefix='/api/order')
     app.register_blueprint(report_api, url_prefix='/api/report')
+    app.register_blueprint(catalog_api, url_prefix='/api/catalog')
     app.register_blueprint(user_api, url_prefix="/api")
 
 

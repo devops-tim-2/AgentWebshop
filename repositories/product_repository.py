@@ -13,6 +13,8 @@ def get_all() -> List[Product]:
 def get(product_id: int) -> Product:
     return Product.query.get(product_id)
 
+def get_from_catalog(catalog_id):
+    return Product.query.filter(Product.catalog_id == catalog_id).all()
 
 def create(product: Product) -> Product:
     db_session.add(product)

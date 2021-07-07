@@ -71,10 +71,10 @@ def test_update_ok(mocker):
         'user_id': user_data['id']
     }
 
-    catalog = Catalog(**catalog_data)
+
 
     mocker.patch('services.product_service.product_repository.get', return_value=product)
-    mocker.patch('services.product_service.catalog_service.get', return_value=catalog)
+    mocker.patch('services.product_service.catalog_service.get', return_value=catalog_data)
     mocker.patch('services.product_service.user_service.get', return_value=user)
     mocker.patch('services.product_service.product_repository.update', return_value=product)
 
@@ -130,12 +130,11 @@ def test_delete_ok(mocker):
         'user_id': user_data['id']
     }
 
-    catalog = Catalog(**catalog_data)
 
     message, code = "The product was successfully deleted.", 200
 
     mocker.patch('services.product_service.product_repository.get', return_value=product)
-    mocker.patch('services.product_service.catalog_service.get', return_value=catalog)
+    mocker.patch('services.product_service.catalog_service.get', return_value=catalog_data)
     mocker.patch('services.product_service.user_service.get', return_value=user)
     mocker.patch('services.product_service.product_repository.delete', return_value=(message, code))
 

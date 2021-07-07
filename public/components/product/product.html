@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/libre/bootstrap.css">
+        <link rel="stylesheet" href="/static/libre/fa.css">
+        <link rel="stylesheet" href="/static/components/product/product.css">
+        <link rel="stylesheet" href="/static/common/style.css">  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="/static/common/util.js"></script>
+        <script src="/static/libre/axios.js"></script>
+        <script src="/static/libre/jquery.js"></script>
+        <script src="/static/libre/bootstrap.js"></script>
+        <script src="/static/dat/data.js"></script>
+    </head>
+    <body>
+      
+        <div class="cart-icon text-center border border-dark bg-light" onclick="flip_cart_content()">
+          <i class="text-dark fas fa-shopping-cart fa-2x cursor-pointer"></i>
+        </div>
+        <div class="cart-content border bg-light" id="cart-content" style="display: none;">
+        </div>
+        <div class="card col-10 offset-1 my-5">
+          <h4 id="name" class="card-header">...</h4>
+          <div class="card-body">
+            <h5 class="card-title" id="price">...</h5>
+            <h6 class="card-subtitle text-muted" id="available">...</h6>
+          </div>
+          <img id="image" alt="Product image" class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-12 d-block user-select-none" style="font-size:1.125rem;text-anchor:middle">
+          <div class="card-body">
+            <a href="#" id="add" class="btn btn-primary">Add to cart</a>
+          </div>
+          <div class="card-footer text-muted" id="created">
+            2 days ago
+          </div>
+        </div>
+    </body>
+    <script src="/static/components/product/product.js"></script>
+</html>

@@ -40,7 +40,7 @@ def update(data: dict, user: dict):
         return product, code
     
     catalog = catalog_service.get(product['catalog_id'])
-    owner = user_service.get(catalog.user_id)
+    owner = user_service.get(catalog['user_id'])
 
     if user['id'] != owner.id:
         return 'This product is not your.', 400
@@ -58,7 +58,7 @@ def delete(product_id: int, user: dict):
         return f"Product with id {product_id} not found.", 404
     
     catalog = catalog_service.get(product['catalog_id'])
-    owner = user_service.get(catalog.user_id)
+    owner = user_service.get(catalog['user_id'])
 
     if user['id'] != owner.id:
         return 'This product is not your.', 400

@@ -72,6 +72,7 @@ def test_update_ok(mocker):
     }
 
 
+
     mocker.patch('services.product_service.product_repository.get', return_value=product)
     mocker.patch('services.product_service.catalog_service.get', return_value=catalog_data)
     mocker.patch('services.product_service.user_service.get', return_value=user)

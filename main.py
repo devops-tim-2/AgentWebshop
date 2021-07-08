@@ -40,4 +40,4 @@ def send(path):
 
 
 if __name__ == '__main__':
-    app.run(host=environ.get('FLASK_RUN_HOST'))
+    app.run(host=environ.get('FLASK_RUN_HOST'), port=environ.get('PORT', 5000))

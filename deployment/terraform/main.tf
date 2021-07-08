@@ -116,7 +116,7 @@ variable "key" {
 
 ## backend
 resource "heroku_app" "nistagram" {
-  name = "nistagram-tim2"
+  name = "nistagram-tim2-${var.stage}"
   stack = "container"
   region = "eu"
 

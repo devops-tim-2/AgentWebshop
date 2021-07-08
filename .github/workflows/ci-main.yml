@@ -27,3 +27,5 @@ jobs:
           prerelease: false
       - name: Build and publish image
         run: ./release.sh ${{ secrets.DOCKERHUB_USERNAME }} ${{ secrets.DOCKERHUB_PASSWORD }} ${{ steps.tag_version.outputs.new_tag }}
+      - name: Deploy to production env on Heroku
+        run: ./deploy.sh ${{ steps.tag_version.outputs.new_tag }} nistagramtim2@gmail.com ${{ secrets.HEROKU_API_KEY }} tim2-production-agent-backend-postgres ${{ secrets.SQL_PASSWORD_PRODUCTION }} ${{ secrets.KEY }} ybepsuwt ybepsuwt production ${{ secrets.DOCKERHUB_USERNAME }} nistagram ${{ secrets.JWT_ALGORITHM}} ${{ secrets.JWT_SECRET }} ${{ secrets.WTF_CSRF_SECRET_KEY }} ${{ secrets.ENABLE_CSRF }}
